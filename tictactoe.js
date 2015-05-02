@@ -6,10 +6,10 @@ $(document).ready(function() {
     score: 0,
 
     pickSquare: function(square) {
-      $(square).text(this.XO);
+      square.textContent = player.XO;
       square.disabled = true;
-    },
-  }
+    }
+  };
 
   var computer = {
     XO: "O",
@@ -20,24 +20,24 @@ $(document).ready(function() {
       var square_to_pick;
 
       // if there's a winning move, pick it
-      square_to_pick = this.checkForWinningMove();
+      square_to_pick = computer.checkForWinningMove();
       if (square_to_pick != false) {
-        this.pickSquare(square_to_pick);
+        computer.pickSquare(square_to_pick);
         game.nextTurn();
         return;
       }
 
       // if player is about to win, make a counter move
-      square_to_pick = this.checkForCounter();
+      square_to_pick = computer.checkForCounter();
       if (square_to_pick != false) {
-        this.pickSquare(square_to_pick);
+        computer.pickSquare(square_to_pick);
         game.nextTurn();
         return;
       }
 
       // if center is available, pick it
       if (board.squareIsEmpty(null, board.middle)) {
-        this.pickSquare(board.middle);
+        computer.pickSquare(board.middle);
         game.nextTurn();
         return;
       }
@@ -45,7 +45,7 @@ $(document).ready(function() {
       // if player's first move was center, we want a random corner
       if (game.turn === 2 && !board.squareIsEmpty(null, board.middle)) {
         square_to_pick = board.getRandomSquare(board.corners);
-        this.pickSquare(square_to_pick);
+        computer.pickSquare(square_to_pick);
         game.nextTurn();
         return;
       }
@@ -55,26 +55,27 @@ $(document).ready(function() {
           (board.up_left.textContent === player.XO && board.down_right.textContent === player.XO ||
            board.up_right.textContent === player.XO && board.down_left.textContent === player.XO)) {
         square_to_pick = board.getRandomSquare(board.edges);
-        this.pickSquare(square_to_pick);
+        computer.pickSquare(square_to_pick);
         game.nextTurn();
         return;
       }
 
       // if nothing above applies, we can just pick a random square
       empty_squares = board.getEmptySquares();
-      this.pickSquare(board.getRandomSquare(empty_squares));
+      computer.pickSquare(board.getRandomSquare(empty_squares));
       game.nextTurn();
     },
 
     pickSquare: function(square) {
-      $(square).text(this.XO);
+      $(square).text(computer.XO);
       square.disabled = true;
     },
 
     checkForCounter: function() {
       var empty_squares = board.getEmptySquares();
+      var num_empty = empty_squares.length;
 
-      for (var i = 0; i < empty_squares.length; i++) {
+      for (var i = 0; i < num_empty; i++) {
         $(empty_squares[i]).text(player.XO);
         if (game.checkForWin(player)) {
           $(empty_squares[i]).text("");
@@ -87,8 +88,9 @@ $(document).ready(function() {
 
     checkForWinningMove: function() {
       var empty_squares = board.getEmptySquares();
+      var num_empty = empty_squares.length;
 
-      for (var i = 0; i < empty_squares.length; i++) {
+      for (var i = 0; i < num_empty; i++) {
         $(empty_squares[i]).text(computer.XO);
         if (game.checkForWin(computer)) {
           $(empty_squares[i]).text("");
@@ -98,7 +100,7 @@ $(document).ready(function() {
       }
       return false;
     }
-  }
+  };
 
   var board = {
     up_left: $('.up_left')[0],
@@ -116,36 +118,33 @@ $(document).ready(function() {
     edges: [],
 
     init: function() {
-      this.corners = [this.up_left, this.up_right, this.down_left, this.down_right];
-      this.edges = [this.up_mid, this.middle_right, this.down_mid, this.middle_left];
-      this.clear();
-      this.attachHandlers();
+      board.corners = [this.up_left, this.up_right, this.down_left, this.down_right];
+      board.edges = [this.up_mid, this.middle_right, this.down_mid, this.middle_left];
+      board.clear();
+      board.attachHandlers();
     },
 
     attachHandlers: function() {
-      var self = this;
-
-      self.buttons.on('click', function() {
-        console.log("moving to next turn because player clicked a square");
+      board.buttons.on('click', function() {
         player.pickSquare(this);
         game.nextTurn();
       });
     },
 
     clear: function() {
-      var self = this;
+      var num_buttons = board.buttons.length;
 
-      for (var i = 0; i < self.buttons.length; i++) {
-        self.buttons[i].disabled = false;
+      for (var i = 0; i < num_buttons; i++) {
+        board.buttons[i].disabled = false;
       }
-      self.buttons.text("");
+      board.buttons.text("");
       game.is_player_turn = true;
       game.turn = 1;
       $('.msg').text("Good luck!");
     },
 
     disableEmptyButtons: function() {
-      var empty_squares = this.getEmptySquares();
+      var empty_squares = board.getEmptySquares();
       for (var i = 0; i < empty_squares.length; i++) {
         empty_squares[i].disabled = true;
       }
