@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<link href="tictactoe.css" rel="stylesheet">
+	<link href="qunit-1.18.0.css" rel="stylesheet">
+</head>
+
+<body>
+		<h1>Impossible Tic-Tac-Toe!</h1>
+	<div class="board">
+		<button class="up_left"></button>
+		<button class="up"></button>
+		<button class="up_right"></button>
+		<button class="left"></button>
+		<button class="mid"></button>
+		<button class="right"></button>
+		<button class="down_left"></button>
+		<button class="down"></button>
+		<button class="down_right"></button>
+	</div>
+
+	<p>You are <b class="player_xo"></b></p>
+	<p class="msg"></p>
+
+	<button class="new_game">New Game</button>
+
+	<div id="qunit"></div>
+
+	<script src="jquery-1.11.2.min.js"></script>
+	<script src="qunit-1.18.0.js"></script>
+	<script src="tictactoe.js"></script>
+	<script src="tictactoe_tests.js"></script>
+</body>
+</html>
