@@ -50,14 +50,6 @@ $(document).ready(function() {
         return;
       }
 
-      // if it's the computer's 2nd move, and the player has center and 1 corner, we want a corner
-      if (game.turn === 4 && !board.squareIsEmpty(null, board.middle) && board.cornerIsOccupied(player)) {
-        square_to_pick = board.getRandomSquare($(board.corners).filter(board.getEmptySquares()));
-        computer.pickSquare(square_to_pick);
-        game.nextTurn();
-        return;
-      }
-
       // if it's the computer's 2nd move, and the player has 2 opposing corners, we want an edge
       if (game.turn === 4 && 
           (board.up_left.textContent === player.XO && board.down_right.textContent === player.XO ||
@@ -68,8 +60,15 @@ $(document).ready(function() {
         return;
       }
 
+      // if it's the computer's 2nd move, and the player has center and 1 corner, we want a corner
+      if (game.turn === 4 && !board.squareIsEmpty(null, board.middle) && board.cornerIsOccupied(player)) {
+        square_to_pick = board.getRandomSquare($(board.corners).filter(board.getEmptySquares()));
+        computer.pickSquare(square_to_pick);
+        game.nextTurn();
+        return;
+      }
+
       // if nothing above applies, we can just pick a random square
-      console.log('random!!')
       empty_squares = board.getEmptySquares();
       computer.pickSquare(board.getRandomSquare(empty_squares));
       game.nextTurn();
